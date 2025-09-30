@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Officer {
+  id          Int        @id @default(autoincrement())
+  officerId   String     @unique
+  name        String
+  email       String
+  password    String?
+  phoneNumber String     @unique
+  stationName String
+
+  // Relation: one officer can have many geofences
+  geofences   geofence[]
+}
+
+model personnel {
+  id           Int       @id @default(autoincrement())
+  personnelId  String    @unique
+  name         String
+  password     String
+  phoneNumber  String    @unique
+  deployed     Boolean   @default(false)
+  currentCords Json?
+  geofenceId   Int?      
+  geofence     geofence? @relation(fields: [geofenceId], references: [id])
+
+  onShift      Boolean   @default(false)
+  stationName  String
+}
+
+model geofence {
+  id          Int        @id @default(autoincrement())
+  officerId   Int
+  officer     Officer    @relation(fields: [officerId], references: [id])
+
+  name        String
+  type        String
+  center_lat  Float?
+  center_long Float?
+  radius      Float?
+  polygon     Json?
+  created_at  DateTime   @default(now())
+
+  // Relation: one geofence can have many personnel
+  personnel   personnel[]
+}
