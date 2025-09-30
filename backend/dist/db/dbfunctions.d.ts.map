@@ -1,0 +1,1 @@
+{"version":3,"file":"dbfunctions.d.ts","sourceRoot":"","sources":["../../src/db/dbfunctions.ts"],"names":[],"mappings":"AAEA,wBAAsB,aAAa,CAAC,SAAS,EAAE,MAAM,EAAE,IAAI,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM,EAAE,QAAQ,EAAE,MAAM,EAAE,WAAW,EAAE,MAAM,EAAE,WAAW,EAAE,MAAM;;;;;;;;GAQ7I;AAED,wBAAsB,WAAW,CAAC,SAAS,EAAE,MAAM;;;;;;;;UAIlD;AAED,wBAAsB,cAAc,CAAC,KAAK,EAAE,MAAM;;;;;;;;UAGjD"}
