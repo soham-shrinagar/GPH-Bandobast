@@ -14,7 +14,7 @@ const login = () => {
         try {
             console.log("Login Successful")
             const response = await fetch(
-                `${backendUrl}/api/personnelLogin`,
+                `${backendUrl}/api/login-personnelId`,
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

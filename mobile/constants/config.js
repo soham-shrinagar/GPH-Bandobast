@@ -1,1 +1,1 @@
-export const backendUrl = "";
+export const backendUrl = "http://10.208.187.106:3000";

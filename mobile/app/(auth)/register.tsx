@@ -6,23 +6,28 @@ import { backendUrl } from "@/constants/config";
 
 const register = () => {
   const [personnelId, setPersonnelId] = useState("");
+  const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [stationName, setStationName] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleSubmit() {
     try {
-      console.log("Registering...", personnelId, phoneNumber, password);
+      console.log("Registering...", personnelId, phoneNumber,stationName,fullName, password);
 
       const response = await fetch(`${backendUrl}/api/personnelRegistration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ personnelId, phoneNumber, password }),
+        body: JSON.stringify({ personnelId, fullName, password, phoneNumber, stationName}),
       });
 
       const data = await response.json();
       if (response.ok) {
         console.log("Registration successful:", data);
         setPersonnelId("");
+        setFullName("");
+        setPhoneNumber("");
+        setStationName("");
         setPassword("");
         router.replace("/login");
       } else {
@@ -44,10 +49,22 @@ const register = () => {
         style={styles.textinput}
       />
       <TextInput
+        placeholder="Full Name"
+        onChangeText={setFullName}
+        value={fullName}
+        style={styles.textinput}
+      />
+      <TextInput
         placeholder="Phone Number"
         keyboardType="phone-pad"
         onChangeText={setPhoneNumber}
         value={phoneNumber}
+        style={styles.textinput}
+      />
+      <TextInput
+        placeholder="Station Name"
+        onChangeText={setStationName}
+        value={stationName}
         style={styles.textinput}
       />
       <TextInput
