@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Link, router } from "expo-router";
 import { backendUrl } from "@/constants/config";
+import { useAuth } from "@/contexts/AuthContext";
 
 const register = () => {
+  const { isLoggedIn } = useAuth();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.replace("/deployment"); // or "/dashboard"
+    }
+  }, [isLoggedIn]);
+
   const [personnelId, setPersonnelId] = useState("");
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -13,12 +22,25 @@ const register = () => {
 
   async function handleSubmit() {
     try {
-      console.log("Registering...", personnelId, phoneNumber,stationName,fullName, password);
+      console.log(
+        "Registering...",
+        personnelId,
+        phoneNumber,
+        stationName,
+        fullName,
+        password
+      );
 
       const response = await fetch(`${backendUrl}/api/personnelRegistration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ personnelId, fullName, password, phoneNumber, stationName}),
+        body: JSON.stringify({
+          personnelId,
+          fullName,
+          password,
+          phoneNumber,
+          stationName,
+        }),
       });
 
       const data = await response.json();

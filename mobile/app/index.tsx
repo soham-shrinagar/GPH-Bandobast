@@ -1,8 +1,20 @@
-import { Link } from "expo-router";
+import { useAuth } from "@/contexts/AuthContext";
+import { Link, router } from "expo-router";
+import { useEffect } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
+
+const { isLoggedIn } = useAuth();
+  
+    useEffect(() => {
+      if (isLoggedIn) {
+        router.replace("/deployment"); // or "/dashboard"
+      }
+    }, [isLoggedIn]);
+
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <Text style={styles.title}>Personnel Deployment Tool</Text>
