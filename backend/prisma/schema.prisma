@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
 }
 
 model Officer {
@@ -18,6 +18,7 @@ model Officer {
 
   // Relation: one officer can have many geofences
   geofences   geofence[]
+
 }
 
 model personnel {
@@ -28,11 +29,12 @@ model personnel {
   phoneNumber  String    @unique
   deployed     Boolean   @default(false)
   currentCords Json?
-  geofenceId   Int?      
+  geofenceId   Int?
   geofence     geofence? @relation(fields: [geofenceId], references: [id])
 
   onShift      Boolean   @default(false)
   stationName  String
+
 }
 
 model geofence {
@@ -50,4 +52,5 @@ model geofence {
 
   // Relation: one geofence can have many personnel
   personnel   personnel[]
+
 }
