@@ -5,6 +5,7 @@ import DashboardPage from "./pages/DashboardPage";
 import { Routes, Route } from "react-router-dom";
 import NotificationSender from "./pages/Notification";
 import Landing from "./pages/Landing";
+import PanGoaDeployment from "./pages/PanGoaDeployment";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login-id" element={<LoginId />} />
       <Route path="/main" element={<DashboardPage/>}/>
       <Route path="/notification" element={<NotificationSender/>}/>
+      <Route path="/pan-goa-deployment" element={<PanGoaDeployment/>}/>
     </Routes>
   );
 }

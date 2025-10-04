@@ -1,1 +1,1 @@
-{"root":["./src/app.ts","./src/controllers/authcontrol.ts","./src/controllers/authcontrolmobile.ts","./src/db/dbclient.ts","./src/db/dbfunctions.ts","./src/middleware/authmiddleware.ts"],"version":"5.9.2"}
+{"root":["./src/app.ts","./src/controllers/authControl.ts","./src/controllers/authControlMobile.ts","./src/controllers/serviceControl.ts","./src/db/dbclient.ts","./src/db/dbfunctions.ts","./src/middleware/authMiddleware.ts"],"version":"5.9.2"}

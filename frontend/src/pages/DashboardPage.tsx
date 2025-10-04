@@ -21,38 +21,79 @@ export default function DashboardPage() {
   const navigate = useNavigate();
   const [personnel, setPersonnel] = useState<Personnel[]>([]);
   const [geofences, setGeofences] = useState<Geofence[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login-email");
+          return;
+        }
+
+        // Get officer info
         const officerRes = await fetch(`${baseUrl}/api/auth/me`, {
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
+        if (!officerRes.ok) {
+          console.error("Failed to fetch officer");
+          navigate("/login-email");
+          return;
+        }
+
         const officer = await officerRes.json();
 
+        // Get personnel by officer's station
         const personnelRes = await fetch(
-          `${baseUrl}/api/personnel?stationName=${officer.stationName}`
+          `${baseUrl}/api/personnel?stationName=${officer.stationName}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+
         const personnelData = await personnelRes.json();
 
+        // Get geofences for this officer
         const geofenceRes = await fetch(
-          `${baseUrl}/api/geofences?officerId=${officer.id}`
+          `${baseUrl}/api/geofences?officerId=${officer.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+
         const geofenceData = await geofenceRes.json();
 
         setPersonnel(personnelData);
         setGeofences(geofenceData);
       } catch (err) {
         console.error("Error loading dashboard data:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [navigate]);
 
   function handleLogout() {
     localStorage.removeItem("token");
     navigate("/login-email", { replace: true });
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-lg text-gray-600">
+        Loading dashboard...
+      </div>
+    );
   }
 
   return (
@@ -95,16 +136,24 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {personnel.map((p) => (
-                  <tr key={p.id} className="border-b hover:bg-green-50">
-                    <td className="px-4 py-2">
-                      <input type="checkbox" />
+                {personnel.length > 0 ? (
+                  personnel.map((p) => (
+                    <tr key={p.id} className="border-b hover:bg-green-50">
+                      <td className="px-4 py-2">
+                        <input type="checkbox" />
+                      </td>
+                      <td className="px-4 py-2">{p.name}</td>
+                      <td className="px-4 py-2">{p.phoneNumber}</td>
+                      <td className="px-4 py-2">{p.stationName}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="px-4 py-3 text-center text-gray-500">
+                      No personnel found for this station
                     </td>
-                    <td className="px-4 py-2">{p.name}</td>
-                    <td className="px-4 py-2">{p.phoneNumber}</td>
-                    <td className="px-4 py-2">{p.stationName}</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -123,15 +172,23 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {geofences.map((g) => (
-                  <tr key={g.id} className="border-b hover:bg-yellow-50">
-                    <td className="px-4 py-2">{g.name}</td>
-                    <td className="px-4 py-2">{g.type}</td>
-                    <td className="px-4 py-2">
-                      <input type="radio" name="geofenceSelect" />
+                {geofences.length > 0 ? (
+                  geofences.map((g) => (
+                    <tr key={g.id} className="border-b hover:bg-yellow-50">
+                      <td className="px-4 py-2">{g.name}</td>
+                      <td className="px-4 py-2">{g.type}</td>
+                      <td className="px-4 py-2">
+                        <input type="radio" name="geofenceSelect" />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className="px-4 py-3 text-center text-gray-500">
+                      No geofences assigned
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
